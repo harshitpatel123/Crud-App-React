@@ -27,8 +27,7 @@ This app is created using react js
   Home : which redirects to home page if it is clicked
   product : which redirects to product page if it is clicked
   form : which redirects to home form if it is clicked
-  logout button : which logs out the user and also runs the function called Handlelogout
-  this function will clear the user data from local storage and redirect the user back to the login page
+  logout button : which logs out the user and also runs the function called Handlelogout which redirect the user back to the login page
 
   
 - Home.js
