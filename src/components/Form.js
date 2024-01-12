@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate ,useLocation} from 'react-router-dom';
 import Navbar from './Navbar'
 
-let index = 11;
+let index = 100;
 
 
 export default function Form() {
@@ -40,25 +40,25 @@ export default function Form() {
             phone,
             website,
         };
-
+        
         if (location.state === null) {
             // Save the form data to local storage
             const existingData = JSON.parse(localStorage.getItem('AllUserData')) || [];
+            let lastIndex = existingData.length;
+            formData.id = lastIndex + 1;
             const newData = [...existingData, formData];
             localStorage.setItem('AllUserData', JSON.stringify(newData));
             navigate('/product');
         }
         else{
-            console.log("saving data")
+
             let AllUserData = JSON.parse(localStorage.getItem('AllUserData')) || [];
             const newUpdatedData = AllUserData.map(item => {
                 if (item.id === formData.id) {
-                    console.log("jjj")
                     return formData
                 }
                 return item;
             })
-            console.log('update',newUpdatedData)
             localStorage.setItem('AllUserData', JSON.stringify(newUpdatedData));
             navigate('/product', { state: { updatedData: formData } });
         }
