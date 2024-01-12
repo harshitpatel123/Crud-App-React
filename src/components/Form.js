@@ -45,7 +45,7 @@ export default function Form() {
             // Save the form data to local storage
             const existingData = JSON.parse(localStorage.getItem('AllUserData')) || [];
             let lastIndex = existingData.length;
-            formData.id = lastIndex + 1;
+            formData.id = existingData[lastIndex-1].id + 1;
             const newData = [...existingData, formData];
             localStorage.setItem('AllUserData', JSON.stringify(newData));
             navigate('/product');
