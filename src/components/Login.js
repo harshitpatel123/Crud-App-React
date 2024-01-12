@@ -52,6 +52,7 @@ export default function Login() {
 
 function checkCredential(username,password) {
   const credentials = [
+    {uname:'aceinfoway' , pwd : 'abc'},
     {uname:'harshit' , pwd : 'abc'},
     {uname:'parth' , pwd : 'abc'},
     {uname:'kirtan' , pwd : 'abc'},

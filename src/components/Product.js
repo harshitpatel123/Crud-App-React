@@ -1,46 +1,69 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import deleteimg from '../components/delete.png'
-import Form from './Form';
-import { DataContext } from './DataContext';
 import Navbar from './Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 export default function Product() {
 
-    const [userData, setuserData] = useState({ hits: [] });
-    const [deleteid, setdeleteid] = useState(-1);
-    const [existingData,setexistingdata] =useState(JSON.parse(localStorage.getItem('formData')) || []);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const updatedData = location.state && location.state.updatedData;
+    
+    
+    const existingData = JSON.parse(localStorage.getItem('AllUserData')) || []
 
-    console.log(existingData)
+    const [userData, setuserData] = useState([]);
+    const [deleteid, setdeleteid] = useState(-1);
+    
+
 
     useEffect(() => {
         const fetchData = async () => {
             const { data } = await axios(
                 "https://jsonplaceholder.typicode.com/users"
-            );  
-            setuserData({ hits: data });
+            );
+            let tempdata = [...data,...existingData]
+            setuserData(tempdata);
+            localStorage.setItem('AllUserData', JSON.stringify(tempdata));
         };
-        fetchData();
-        console.log(userData)
-    }, [setuserData]);
+        const checkData = JSON.parse(localStorage.getItem('AllUserData')) || null;
+        if(checkData === null){   
+            fetchData();
+        }
+        else{
+            setuserData(checkData)
+            console.log("lll")
+        }
+        
+    }, []);  
+
+    useEffect(() => {
+        setTimeout(() => {
+            
+            if (location.state !== null) {
+                const allUserData = JSON.parse(localStorage.getItem('AllUserData')) || [];
+                console.log("in the effect")
+                setuserData(allUserData);
+            }
+        }, 1000);
+    }, [location.state]);
+
 
     function HandleRemoveTask() {
-        let temparr = userData.hits.filter(item => item.id !== deleteid)
+        let temparr = userData.filter(item => item.id !== deleteid)
         setdeleteid(-1)
-        setuserData({ hits: temparr })
+        setuserData(temparr)
 
     }
 
     function HandleAddTask() {
-        return (
-            <div>
-                <h1>sjdhiui</h1>
-                <DataContext.Provider value={userData}>
-                    <Form />
-                </DataContext.Provider>
-            </div>
-        )
+        navigate('/form')
+    }
+
+    function HandleEditTask(edititem) {
+        localStorage.setItem('AllUserData', JSON.stringify(userData));
+        navigate('/form', { state: { editData: edititem } });
     }
 
 
@@ -53,9 +76,9 @@ export default function Product() {
             <center>
                 <h2>User Data</h2>
             </center>
-            <Link to='/form'>
-                <button type="button" className="btn btn-success" onClick={HandleAddTask} style={{ float: "right", marginRight: "50px" }}>ADD</button>
-            </Link>
+
+            <button type="button" className="btn btn-success" onClick={HandleAddTask} style={{ float: "right", marginRight: "50px" }}>ADD</button>
+
             <br /><br />
 
 
@@ -69,14 +92,15 @@ export default function Product() {
                         <th scope="col">User Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone</th>
-                        <th scope="col">Option</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
-                    {userData.hits &&
-                        userData.hits.map(item => (
+                    {userData &&
+                        userData.map(item => (
                             <tr>
                                 <th scope='row'>{item.id}</th>
                                 <td>{item.name}</td>
@@ -84,24 +108,10 @@ export default function Product() {
                                 <td>{item.email}</td>
                                 <td>{item.phone}</td>
                                 <td component="td" >
-                                    <button onClick={() => setdeleteid(item.id)} type="button"
-                                        className="btn btn-light btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
-                                        <img src={deleteimg} alt='img missing' style={{ height: "25px", width: "25px" }} />
+                                    <button onClick={() => HandleEditTask(item)} type="button" className="btn btn-light btn-sm">
+                                        <b> Edit</b>
                                     </button>
                                 </td>
-                            </tr>
-
-                        ))}
-                    {existingData &&
-                        existingData.map(item => (
-                            <tr>
-                                <th scope='row'>{item.id}</th>
-                                <td>{item.name}</td>
-                                <td>{item.username}</td>
-                                <td>{item.email}</td>
-                                <td>{item.phone}</td>
                                 <td component="td" >
                                     <button onClick={() => setdeleteid(item.id)} type="button"
                                         className="btn btn-light btn-sm"

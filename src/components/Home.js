@@ -12,7 +12,7 @@ export default function Home() {
       <h1>Go To Product Page</h1>
         </div>
       <Link to='/product'>
-          <button>GO</button>
+          <button className='btn btn-success btn-lg'>GO</button>
         </Link>
       </center>
     </div>
