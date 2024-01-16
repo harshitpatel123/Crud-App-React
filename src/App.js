@@ -17,30 +17,38 @@ function App() {
   };
   return (
     <>
-    {/* routing setup */}
+      {/* routing setup */}
 
       <Router>
         <div>
           <Routes>
-            {isAuthenticated ? 
+
+          <>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/form" element={<Form />} />
+          </>
+
+          {/* {isAuthenticated ? 
             <>
-            <Route path="/" element={<Login  onDataFromChild={HandleDataFromChild} />} />
+            <Route path="/" element={<Login />} />
             <Route path="/home" element={<Home />} />
             <Route path="/product" element={<Product />} />
             <Route path="/form" element={<Form />} />
             </>
             :
             <>
-            <Route path="/" element={<Login onDataFromChild={HandleDataFromChild} />} />
-            <Route path="/home" element={<Login onDataFromChild={HandleDataFromChild} />} />
-            <Route path="/product" element={<Login onDataFromChild={HandleDataFromChild} />} />
-            <Route path="/form" element={<Login onDataFromChild={HandleDataFromChild} />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Login />} />
+            <Route path="/product" element={<Login />} />
+            <Route path="/form" element={<Login />} />
             </>
 
-          }
-          </Routes>
-        </div>
-      </Router>
+          } */}
+        </Routes>
+      </div>
+    </Router >
     </>
   );
 }

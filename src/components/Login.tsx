@@ -6,7 +6,7 @@ interface Credentials {
   pwd: string;
 }
 
-export default function Login({onDataFromChild}) {
+export default function Login() {
 
   const navigate = useNavigate();
   const [username, setusername] = useState<string>("")
@@ -15,7 +15,6 @@ export default function Login({onDataFromChild}) {
   const [err, seterr] = useState<string>('')
 
   if (status === "success") {
-    onDataFromChild(true)
     // Redirect to the home page if successfully login
     navigate('/home');
     return <></>;
