@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import deleteimg from './delete.png';
+import eyeimg from './eye.png';
 
-import Navbar from './Navbar';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Navbar from './Navbar.tsx';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface Address {
   street: string;
@@ -25,7 +27,7 @@ export default function Product() {
   const location = useLocation();
   const updatedData = location.state && location.state.updatedData;
 
-  const existingData: UserData[] = JSON.parse(localStorage.getItem('AllUserData') || 'null');
+  const existingData: UserData[] = JSON.parse(localStorage.getItem('AllUserData') || '[]');
 
   const [userData, setUserData] = useState<UserData[]>([]);
   const [deleteId, setDeleteId] = useState<number>(-1);
@@ -57,27 +59,37 @@ export default function Product() {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (location.state !== null) {
-        const allUserData: UserData[]  = JSON.parse(localStorage.getItem('AllUserData') || 'null') || [];
-        setUserData(allUserData);
-      }
-    }, 1000);
+    if (location.state !== null) {
+      const allUserData: UserData[] = JSON.parse(localStorage.getItem('AllUserData') || 'null') || [];
+      setUserData(allUserData);
+    }
+
   }, [location.state]);
 
   // to remove the user data 
-  function handleRemoveTask() {
+  async function handleRemoveTask() {
     const tempArr = userData.filter((item) => item.id !== deleteId);
+
+    //deleting the item from JSON api
+    const response = await fetch(`https://jsonplaceholder.typicode.com/users/${deleteId}`, {
+      method: 'DELETE'
+    })
+    if (response.ok) {
+      console.log("item deleted from api")
+    }
+
+
     setDeleteId(-1);
     setUserData(tempArr);
     localStorage.setItem('AllUserData', JSON.stringify(tempArr));
+
   }
 
   // to add new data
   function handleAddTask() {
     navigate('/form');
   }
-  
+
   //to change userdata
   function handleEditTask(editItem: UserData) {
     localStorage.setItem('AllUserData', JSON.stringify(userData));
@@ -131,7 +143,7 @@ export default function Product() {
                     data-bs-toggle="modal"
                     data-bs-target={`#extraDetails-${item.id}`}
                   >
-                    <b>Show</b>
+                    <img src={eyeimg} alt='img missing' style={{ height: "25px", width: "25px" }} />
                   </button>
                 </td>
                 <td >
@@ -147,7 +159,7 @@ export default function Product() {
                     data-bs-toggle="modal"
                     data-bs-target="#deleteconfirmation"
                   >
-                    <b>Delete</b>
+                    <img src={deleteimg} alt='img missing' style={{ height: "25px", width: "25px" }} />
                   </button>
                 </td>
 

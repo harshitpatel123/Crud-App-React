@@ -2,11 +2,11 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import Login from './components/Login';
-import Home from './components/Home'
-import Product from './components/Product';
-import Form from './components/Form';
-import Navbar from './components/Navbar'
+import Login from './components/Login.tsx';
+import Home from './components/Home.tsx'
+import Product from './components/Product.tsx';
+import Form from './components/Form.tsx';
+import Navbar from './components/Navbar.tsx'
 
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(false);

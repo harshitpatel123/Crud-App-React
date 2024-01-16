@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useNavigate ,useLocation} from 'react-router-dom';
-import Navbar from './Navbar'
+import { useNavigate, useLocation } from 'react-router-dom';
+import Navbar from './Navbar.tsx'
 
 let index = 100;  // creating index variable as a failsafe if no id is assign
 
@@ -40,8 +40,10 @@ export default function Form() {
             phone,
             website,
         };
-        
+
         // Save the form data to local storage 
+        // this logic checks if this data is new or updated
+        //for new data
         if (location.state === null) {
             const existingDataStr = localStorage.getItem('AllUserData');
             const existingData = existingDataStr ? JSON.parse(existingDataStr) : [];
@@ -50,17 +52,32 @@ export default function Form() {
             const newData = [...existingData, formData];
             localStorage.setItem('AllUserData', JSON.stringify(newData));
             navigate('/product');
-          } else {
+        }
+        // for updated data
+        else {
             let AllUserData = JSON.parse(localStorage.getItem('AllUserData') || '[]');
             const newUpdatedData = AllUserData.map((item) => {
-              if (item.id === formData.id) {
-                return formData;
-              }
-              return item;
+                if (item.id === formData.id) {
+                    return formData;
+                }
+                return item;
             });
+
+            // updating resource in JSON api
+            fetch(`https://jsonplaceholder.typicode.com/users/${formData.id}`, {
+                method: 'PUT',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+                .then((response) => response.json())
+                .then((json) => console.log("item updated in api",json));
+
+            // updating resource in local storage
             localStorage.setItem('AllUserData', JSON.stringify(newUpdatedData));
             navigate('/product', { state: { updatedData: formData } });
-          }
+        }
 
     };
 

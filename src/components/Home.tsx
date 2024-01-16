@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from './Navbar'
+import Navbar from './Navbar.tsx'
 import { Link } from 'react-router-dom'
 
 export default function Home() {
