@@ -6,7 +6,7 @@ import Login from './components/Login.tsx';
 import Home from './components/Home.tsx'
 import Product from './components/Product.tsx';
 import Form from './components/Form.tsx';
-import Navbar from './components/Navbar.tsx'
+
 
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(false);
