@@ -3,6 +3,8 @@ CRUD APP
 username : aceinfoway
 password : abc
 
+versel link : https://deployment-crud-app.vercel.app/
+
 This app is created using react js 
 
 - this is single page application 
