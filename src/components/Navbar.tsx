@@ -1,11 +1,9 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 
 export default function Navbar() {
-    // to logout the user and clear local data from browser
-    function HandleLogout(){
-        localStorage.clear()
-    }
+
+
     return (
         <div>
             <section id='navbar'>
@@ -44,11 +42,6 @@ export default function Navbar() {
                                     </Link>
                                 </li>
                             </ul>
-                            <Link className="nav-link active" aria-current="page" to="/">
-                                <button onClick={HandleLogout} className="btn btn-outline-danger">
-                                    Log Out
-                                </button>
-                            </Link>
                         </div>
                     </div>
                 </nav>

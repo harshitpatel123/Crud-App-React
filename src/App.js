@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route , Navigate } from 'react-router-dom';
+import { useState , useEffect } from 'react';
 import Login from './components/Login.tsx';
 import Home from './components/Home.tsx'
 import Product from './components/Product.tsx';
@@ -11,10 +11,22 @@ import Form from './components/Form.tsx';
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(false);
 
-  // Callback function to receive data from the child
-  const HandleDataFromChild = (data) => {
-    setisAuthenticated(data);
+  useEffect(() => {
+    // Check if there is any data named 'username' in local storage
+    const username = JSON.parse(localStorage.getItem('username'));
+    setisAuthenticated(Boolean(username));
+  }, []);
+
+  const handleLogin = (username) => {
+    localStorage.setItem('username', JSON.stringify(username));
+    setisAuthenticated(true);
   };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setisAuthenticated(false);
+  };
+
   return (
     <>
       {/* routing setup */}
@@ -23,29 +35,19 @@ function App() {
         <div>
           <Routes>
 
-          <>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/product" element={<Product />} />
-            <Route path="/form" element={<Form />} />
-          </>
-
-          {/* {isAuthenticated ? 
+          {isAuthenticated ? 
             <>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home" element={<Home onLogout={handleLogout} />} />
             <Route path="/product" element={<Product />} />
             <Route path="/form" element={<Form />} />
             </>
             :
             <>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Login />} />
-            <Route path="/product" element={<Login />} />
-            <Route path="/form" element={<Login />} />
+            <Route path="*" element={<Login onLogin={handleLogin} />} />
             </>
 
-          } */}
+          }
         </Routes>
       </div>
     </Router >

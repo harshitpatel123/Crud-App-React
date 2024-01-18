@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
+
 interface Credentials {
   uname: string;
   pwd: string;
 }
 
-export default function Login() {
+export default function Login({onLogin}) {
 
   const navigate = useNavigate();
   const [username, setusername] = useState<string>("")
@@ -19,11 +20,12 @@ export default function Login() {
     navigate('/home');
     return <></>;
   }
-
+  
   async function HandleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void>  {
     e.preventDefault()     // to prevent page reload when submit
     try {
       await checkCredential(username, password)
+      onLogin(username)
       setstatus("success")
       seterr("")
     }
@@ -87,6 +89,8 @@ function checkCredential(username: string, password: string):Promise<void> {
   return new Promise((resolve, reject) => {
     let isUser = credentials.findIndex((value) => value.uname === username && value.pwd === password)
     if (isUser > -1) {
+      localStorage.setItem('username', JSON.stringify(username));
+      localStorage.setItem('password', JSON.stringify(password));
       resolve()
     }
     else {
